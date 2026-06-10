@@ -261,7 +261,7 @@ export default function iFINANCE({ username, onLogout }) {
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             {/* Greeting */}
             <span style={{ fontSize: "13px", color: "#555" }}>
-              👋 Good day, <strong>{username}</strong>
+            Good day, <strong>{username}</strong>
             </span>
 
             {/* Reset */}
@@ -296,8 +296,8 @@ export default function iFINANCE({ username, onLogout }) {
               style={{
                 padding: "6px 12px",
                 fontSize: "12px",
-                backgroundColor: "#e74c3c",
-                border: "none",
+                backgroundColor: "blue",
+                border: "1px solid #ddd",
                 borderRadius: "4px",
                 cursor: "pointer",
                 color: "white",
