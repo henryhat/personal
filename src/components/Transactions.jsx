@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 
-export default function iFINANCE() {
+export default function iFINANCE({ username, onLogout }) {
   const formatMoney = (amount) => {
     return amount.toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -9,7 +9,6 @@ export default function iFINANCE() {
     });
   };
 
-  //export default function iFINANCE() {
   const [transactions, setTransactions] = useState(() => {
     const saved = localStorage.getItem("ifinance_transactions");
     return saved ? JSON.parse(saved) : [];
@@ -31,7 +30,7 @@ export default function iFINANCE() {
     new Date().toISOString().split("T")[0],
   );
 
-  // The expenses form
+  // Expenses form
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseCategory, setExpenseCategory] = useState("Food");
   const [expenseDescription, setExpenseDescription] = useState("");
@@ -146,7 +145,6 @@ export default function iFINANCE() {
             style={{ width: "120px", height: "96px", margin: "auto" }}
             alt="iFINANCE"
           />
-
           <p style={{ fontSize: "12px", color: "#888", margin: 0 }}>
             Personal Finance Tracker
           </p>
@@ -234,9 +232,10 @@ export default function iFINANCE() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
+      {/* ── Navbar ── */}
       <div
         style={{
-          padding: "1rem 1rem",
+          padding: "0.75rem 1rem",
           background: "#fff",
           borderBottom: "1px solid #e0e0e0",
           position: "sticky",
@@ -249,46 +248,65 @@ export default function iFINANCE() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            maxWidth: "100%",
           }}
         >
-          <h1
-            style={{
-              fontSize: "22px",
-              fontWeight: "500",
-              margin: 0,
-              color: "#333",
-            }}
-          >
-            <img
-              src={logo}
-              style={{ width: "120px", height: "96px", margin: "auto" }}
-              alt="iFINANCE"
-            />
-          </h1>
-          <button
-            onClick={() => {
-              if (window.confirm("Reset all data? This cannot be undone.")) {
-                setTransactions([]);
-                setStartingBalance(0);
-                setInputStartingBalance(0);
-                setBalanceSet(false);
-                localStorage.clear();
-              }
-            }}
-            style={{
-              padding: "6px 12px",
-              fontSize: "12px",
-              backgroundColor: "green",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              cursor: "pointer",
-              color: "white",
-            }}
-            title="Reset all data"
-          >
-            Reset
-          </button>
+          {/* Logo */}
+          <img
+            src={logo}
+            style={{ width: "120px", height: "96px" }}
+            alt="iFINANCE"
+          />
+
+          {/* Right side */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* Greeting */}
+            <span style={{ fontSize: "13px", color: "#555" }}>
+              👋 Good day, <strong>{username}</strong>
+            </span>
+
+            {/* Reset */}
+            <button
+              onClick={() => {
+                if (window.confirm("Reset all data? This cannot be undone.")) {
+                  setTransactions([]);
+                  setStartingBalance(0);
+                  setInputStartingBalance(0);
+                  setBalanceSet(false);
+                  localStorage.removeItem("ifinance_transactions");
+                  localStorage.removeItem("ifinance_balance");
+                }
+              }}
+              style={{
+                padding: "6px 12px",
+                fontSize: "12px",
+                backgroundColor: "green",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                cursor: "pointer",
+                color: "white",
+              }}
+              title="Reset all data"
+            >
+              Reset
+            </button>
+
+            {/* Logout */}
+            <button
+              onClick={onLogout}
+              style={{
+                padding: "6px 12px",
+                fontSize: "12px",
+                backgroundColor: "#e74c3c",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                color: "white",
+              }}
+              title="Log out"
+            >
+              Log out
+            </button>
+          </div>
         </div>
       </div>
 
@@ -322,7 +340,7 @@ export default function iFINANCE() {
               color: currentBalance >= 0 ? "#333" : "#e74c3c",
             }}
           >
-            ₦{currentBalance.toFixed(2)}
+            ₦{formatMoney(currentBalance)}
           </p>
           <div
             style={{
@@ -357,7 +375,7 @@ export default function iFINANCE() {
                   color: "#27ae60",
                 }}
               >
-                +₦{totalIncome.toFixed(2)}
+                +₦{formatMoney(totalIncome)}
               </p>
             </div>
             <div
@@ -386,7 +404,7 @@ export default function iFINANCE() {
                   color: "#e74c3c",
                 }}
               >
-                -₦{totalExpenses.toFixed(2)}
+                -₦{formatMoney(totalExpenses)}
               </p>
             </div>
           </div>
@@ -711,7 +729,7 @@ export default function iFINANCE() {
                         }}
                       >
                         {transaction.type === "income" ? "+" : "-"}₦
-                        {transaction.amount.toFixed(2)}
+                        {formatMoney(transaction.amount)}
                       </span>
                       <button
                         onClick={() => deleteTransaction(transaction.id)}
@@ -747,7 +765,7 @@ export default function iFINANCE() {
         }}
       >
         <p style={{ fontSize: "12px", color: "#888", margin: 0 }}>
-          iFINANCE © 2025 — Your Personal Finance Tracker
+          iFINANCE © 2026 — Your Personal Finance Tracker
         </p>
       </div>
     </div>
